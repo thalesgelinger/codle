@@ -1,6 +1,17 @@
 ---
+
 import '@/styles/globals.css'
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CodeEditor } from '@/components/ui/code-editor'
+
+
+const title = "Spy number"
+
+const description = "A Number is called SPY number if the sum and Product of its Digits are equal"
+const example= " For Ex: 123 is a SPY Number, (1+2+3) = (1*2*3) "
+const requirement= "Write a program to check if number is a SPY number or not"
+
 ---
 
 <html lang="en">
@@ -9,9 +20,22 @@ import { Button } from "@/components/ui/button"
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Codle</title>
 	</head>
 	<body>
-        <Button>Hello World</Button>
+        <div class="h-screen flex-1 flex justify-center items-center ">
+            <Card className='w-[60vw] h-[50vh]'>
+                 <CardHeader>
+                    <CardTitle>{title}</CardTitle>
+                    <CardDescription>{description}</CardDescription>
+                    <CardDescription>{example}</CardDescription>
+                    <CardDescription>{requirement}</CardDescription>
+                 </CardHeader>
+                <CardContent className="flex flex-col">
+                    <CodeEditor client:load/>
+                </CardContent>
+            </Card>
+        </div>
     </body>
 </html>
+
