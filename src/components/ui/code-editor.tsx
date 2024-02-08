@@ -81,10 +81,7 @@ export function solve(param){
         <>
             <div className="min-h-[40vh] mb-2 relative">
                 <Textarea
-                    className="h-full absolute z-10 bg-transparent text-xl resize-none"
-                    style={{
-                        "-webkit-text-fill-color": "transparent"
-                    }}
+                    className="h-full absolute z-10 bg-transparent text-xl resize-none text-transparent-only"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                 />

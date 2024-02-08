@@ -44,6 +44,10 @@
 }
 
 
+.text-transparent-only {
+    -webkit-text-fill-color: transparent
+}
+
 code[class*="language-"],
 pre[class*="language-"] {
 	color: #c5c8c6;
