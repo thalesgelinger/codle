@@ -19,7 +19,7 @@ export function solve(param){
 
     return (
         <>
-            <div className="min-h-[30vh] mb-2 relative">
+            <div className="min-h-[40vh] mb-2 relative">
                 <Textarea
                     className="h-full absolute z-10 bg-transparent text-xl resize-none"
                     style={{
