@@ -45,7 +45,7 @@
 
 
 .text-transparent-only {
-    -webkit-text-fill-color: transparent
+    -webkit-text-fill-color: transparent;
 }
 
 code[class*="language-"],
