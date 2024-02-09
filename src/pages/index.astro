@@ -3,7 +3,7 @@
 import '@/styles/globals.css'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CodeEditor } from '@/components/ui/code-editor'
-
+import { Toaster } from "@/components/ui/toaster"
 
 const title = "Spy number"
 
@@ -34,6 +34,7 @@ const requirement= "Write a program to check if number is a SPY number or not"
                     <CodeEditor client:load/>
                 </CardContent>
             </Card>
+            <Toaster client:load/>
         </div>
     </body>
 </html>

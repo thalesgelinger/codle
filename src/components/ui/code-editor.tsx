@@ -4,9 +4,14 @@ import Prism from "prismjs"
 import { Button } from "./button";
 import { getWebContainerInstance } from "@/lib/web-container";
 import type { WebContainer } from "@webcontainer/api";
+import { useToast } from "./use-toast";
+import { cn } from "@/lib/utils";
 
 
 const CodeEditor = () => {
+
+    const { toast } = useToast()
+
     const [code, setCode] = useState(`
 export function solve(param){
     // PUT YOUR CODE HERE
@@ -85,9 +90,16 @@ export function solve(param){
         const error = await start.exit
 
         if (error > 0) {
-            alert("You're wrong")
+            toast({
+                variant: "destructive",
+                title: "Nope!!",
+                description: "That's not the right answer, sorry mate!",
+            })
         } else {
-            alert("That's is my good")
+            toast({
+                title: "Yayyy!!",
+                description: "You nailed it, good job!",
+            })
         }
 
         setIsRunning(false)
