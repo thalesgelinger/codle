@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CHALLENGE=$1
+
+cp ./challenges/$CHALLENGE/test.js ./src/challenge/index.js
