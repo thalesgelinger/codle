@@ -3,6 +3,7 @@
 import '@/styles/globals.css'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CodeEditor } from '@/components/ui/code-editor'
+import { AttemptIndicator } from '@/components/ui/attempts-indicator'
 import { Toaster } from "@/components/ui/toaster"
 import { challenge  } from "@/challenge"
 ---
@@ -17,17 +18,22 @@ import { challenge  } from "@/challenge"
 	</head>
 	<body>
         <div class="h-screen flex-1 flex justify-center items-center ">
-            <Card className='w-[60vw]'>
+            <Card className='w-[60vw]' >
                  <CardHeader>
-                    <CardTitle>{challenge.title}</CardTitle>
+                    <CardTitle className='flex flex-row'>
+                        <div class="flex-1">
+                            {challenge.title}
+                        </div>
+                        <AttemptIndicator client:only/>
+                    </CardTitle>
                     <CardDescription>{challenge.description}</CardDescription>
                     <CardDescription>{challenge.example}</CardDescription>
                     <CardDescription>{challenge.requirement}</CardDescription>
                  </CardHeader>
                 <CardContent className="flex flex-col">
                     <CodeEditor
+                        client:only 
                         testScript={challenge.tests}
-                        client:load 
                     />
                 </CardContent>
             </Card>

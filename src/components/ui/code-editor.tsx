@@ -1,14 +1,23 @@
-import { useEffect, useRef, useState, type ElementRef, type LegacyRef } from "react";
+import { useEffect, useRef, useState, type ElementRef, type LegacyRef, useCallback } from "react";
 import { Textarea } from "./textarea"
 import Prism from "prismjs"
 import { Button } from "./button";
 import { getWebContainerInstance } from "@/lib/web-container";
 import type { WebContainer } from "@webcontainer/api";
 import { useToast } from "./use-toast";
-import { cn } from "@/lib/utils";
+import { useSetAtom } from "jotai";
+import { attempsAtom } from "./attempts-indicator";
+
+type CodeEditorProps = {
+    testScript: string;
+}
+
+const CodeEditor = ({
+    testScript,
+}: CodeEditorProps) => {
 
 
-const CodeEditor = () => {
+    const setAttempt = useSetAtom(attempsAtom)
 
     const { toast } = useToast()
 
@@ -25,9 +34,7 @@ export function solve(param){
     const [isContainerReady, setIsContainerReady] = useState(false)
     const [textAreaHeight, setTextAreaHeight] = useState("40vh")
 
-
     const webContainer = useRef<WebContainer>()
-    const highlightRef = useRef<LegacyRef<HTMLDivElement>>()
 
     useEffect(() => {
         buildWebContainer()
@@ -51,9 +58,10 @@ export function solve(param){
                     import { solve } from "./solve.js"
 
                     const error = (msg) => { throw new Error(msg) }
+                    
+                    ${testScript}
 
-                    if(solve(123) === false) error("Test failed")
-
+                    runTests()
                     `,
                 },
             },
@@ -99,6 +107,8 @@ export function solve(param){
                 title: "Nope!!",
                 description: "That's not the right answer, sorry mate!",
             })
+            console.log("Setting attempt")
+            setAttempt(prev => prev + 1)
         } else {
             toast({
                 title: "Yayyy!!",
