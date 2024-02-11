@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ElementRef, type LegacyRef } from "react";
 import { Textarea } from "./textarea"
 import Prism from "prismjs"
 import { Button } from "./button";
@@ -19,11 +19,15 @@ export function solve(param){
 `.trim()
     )
 
-    const [isRunning, setIsRunning] = useState(false)
-    const [isContainerReady, setIsContainerReady] = useState(false)
     const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
 
+    const [isRunning, setIsRunning] = useState(false)
+    const [isContainerReady, setIsContainerReady] = useState(false)
+    const [textAreaHeight, setTextAreaHeight] = useState("40vh")
+
+
     const webContainer = useRef<WebContainer>()
+    const highlightRef = useRef<LegacyRef<HTMLDivElement>>()
 
     useEffect(() => {
         buildWebContainer()
@@ -105,17 +109,26 @@ export function solve(param){
         setIsRunning(false)
     }
 
+
+    const autoGrow = (event: any) => {
+        event.target.style.height = 'auto';
+        event.target.style.height = event.target.scrollHeight + 'px';
+        setTextAreaHeight(event.target.scrollHeight + 'px')
+    };
+
     return (
         <>
-            <div className="min-h-[40vh] mb-2 relative">
+            <div className="h-[40vh] mb-2 relative overflow-auto border border-input">
                 <Textarea
-                    className="h-full absolute z-10 bg-transparent text-xl resize-none text-transparent-only"
+                    className="min-h-[40vh] h-full absolute z-10 bg-transparent text-xl resize-none text-transparent-only"
                     value={code}
+                    onInput={autoGrow}
                     onChange={(e) => setCode(e.target.value)}
                 />
                 <div
+                    style={{ height: textAreaHeight }}
                     dangerouslySetInnerHTML={{ __html: html }}
-                    className="h-full absolute whitespace-pre-wrap px-3 py-2 text-xl overflow-auto"
+                    className="h-full w-full absolute whitespace-pre-wrap px-3 py-2 text-xl overflow-auto"
                 />
             </div>
             <Button
