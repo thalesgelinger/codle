@@ -1,0 +1,47 @@
+
+---
+import '@/styles/globals.css'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
+export function getStaticPaths() {
+  return [
+    {params: {stats: 'win'}},
+    {params: {stats: 'lose'}},
+  ];
+}
+
+const { stats } = Astro.params
+
+const getTitle = () => {
+    switch(stats) {
+        case "win": 
+            return { 
+                value:"That's it my beloved developer" ,
+                style: "text-green-500"
+            }
+        case "lose": 
+            return {
+                value: "Sorry mate, it's not right",
+                style: "text-red-500"
+            }
+    }
+}
+
+const {value: title, style} = getTitle()
+
+---
+
+<div>
+        <div class="h-screen flex-1 flex justify-center items-center ">
+            <Card className='w-[60vw]' >
+                 <CardHeader>
+                    <CardTitle className={style}>
+                        {title}
+                    </CardTitle>
+                    <CardDescription>
+                        You are good for today, come back tomorrow for a new challenge
+                    </CardDescription>
+                 </CardHeader>
+            </Card>
+        </div>
+</div>

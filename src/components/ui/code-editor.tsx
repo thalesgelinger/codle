@@ -5,11 +5,12 @@ import { Button } from "./button";
 import { getWebContainerInstance } from "@/lib/web-container";
 import type { WebContainer } from "@webcontainer/api";
 import { useToast } from "./use-toast";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { attempsAtom } from "./attempts-indicator";
 
 type CodeEditorProps = {
     testScript: string;
+    done(): void
 }
 
 const CodeEditor = ({
@@ -17,7 +18,7 @@ const CodeEditor = ({
 }: CodeEditorProps) => {
 
 
-    const setAttempt = useSetAtom(attempsAtom)
+    const setAttempts = useSetAtom(attempsAtom)
 
     const { toast } = useToast()
 
@@ -107,8 +108,18 @@ export function solve(param){
                 title: "Nope!!",
                 description: "That's not the right answer, sorry mate!",
             })
-            console.log("Setting attempt")
-            setAttempt(prev => prev + 1)
+            setAttempts(prev => {
+                const attempts = prev + 1
+                if (attempts === 3) {
+                    setTimeout(() => {
+                        console.log("Setted")
+                        localStorage.setItem("codle", "lose")
+                        const evt = new CustomEvent("codle")
+                        window.dispatchEvent(evt)
+                    }, 1000)
+                }
+                return attempts
+            })
         } else {
             toast({
                 title: "Yayyy!!",
