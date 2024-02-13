@@ -23,12 +23,9 @@ jobs:
         with:
           node-version: "20"
           cache-dependency-path: ${{ env.BUILD_PATH }}/pnpm-lock.yaml
-      - name: List all
-        run: ls -la
       - name: Install dependencies
         run: pnpm install
         working-directory: ${{ env.BUILD_PATH }}
-      - uses: actions/checkout@v2
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Copy New Challenge
