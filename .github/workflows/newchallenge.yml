@@ -11,6 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     environment: Vercel
     steps:
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          version: 8.6.3
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache-dependency-path: ${{ env.BUILD_PATH }}/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ${{ env.BUILD_PATH }}
       - uses: actions/checkout@v2
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
