@@ -1,11 +1,6 @@
-# Sample workflow for building and deploying an Astro site to GitHub Pages
-#
-# To get started with Astro see: https://docs.astro.build/en/getting-started/
-#
-name: Deploy Astro site to Pages
+name: Build and Deploy
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
 
@@ -51,22 +46,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         working-directory: ${{ env.BUILD_PATH }}
-      - name: Build with Astro
-        run: pnpm build
-        working-directory: ${{ env.BUILD_PATH }}
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ${{ env.BUILD_PATH }}/dist
-
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
+    name: New Chalenge
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Build and Deploy to vercel
         id: deployment
-        uses: actions/deploy-pages@v4
+        run: pnpm newchallenge 1
