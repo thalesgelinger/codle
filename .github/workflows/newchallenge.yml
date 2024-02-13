@@ -28,8 +28,19 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
+      - name: Get last challenge deployed
+        run: |
+          NEXT=$(expr $(cat LAST) + 1)
+          MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          if [ "$NEXT" -gt "$MAX_CHALLENGES" ]; then
+            NEXT=$(expr $NEXT - $MAX_CHALLENGES)
+          fi
+          echo "NEXT = $NEXT"
+          echo "MAX_CHALLENGES = $MAX_CHALLENGES"
       - name: Copy New Challenge
-        run: cp ./challenges/1/test.js ./src/challenge/index.js
+        run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
+      - name: Update Last Challenge deployed
+        run: echo "${NEXT}" > last_deployed.txt
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
