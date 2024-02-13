@@ -10,7 +10,7 @@ import { attempsAtom } from "./attempts-indicator";
 
 type CodeEditorProps = {
     testScript: string;
-    done(): void
+    "client:only": boolean
 }
 
 const CodeEditor = ({

@@ -3,3 +3,5 @@
 CHALLENGE=$1
 
 cp ./challenges/$CHALLENGE/test.js ./src/challenge/index.js
+pnpm build
+vercel --prod
