@@ -21,6 +21,8 @@ jobs:
         with:
           node-version: "20"
           cache-dependency-path: ${{ env.BUILD_PATH }}/pnpm-lock.yaml
+      - name: List all
+        run: ls -la
       - name: Install dependencies
         run: pnpm install
         working-directory: ${{ env.BUILD_PATH }}
