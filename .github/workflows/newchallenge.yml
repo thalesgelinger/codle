@@ -49,9 +49,9 @@ jobs:
     environment: Vercel
     needs: Get-Next-Challenge
     steps:
-      - env:
-          NEXT: ${{needs.Get-Next-Challenge.outputs.next}}
       - name: Copy New Challenge
+        env:
+          NEXT: ${{needs.Get-Next-Challenge.outputs.next}}
         run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
       - name: Update Last Challenge deployed
         run: echo "${NEXT}" > last_deployed.txt
