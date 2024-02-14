@@ -53,15 +53,12 @@ jobs:
           NEXT: ${{needs.GetNextChallenge.outputs.next}}
         run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
       - name: Update Last Challenge deployed
+        env:
+          NEXT: ${{needs.GetNextChallenge.outputs.next}}
         run: echo "${NEXT}" > LAST
-
-      - uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+      - uses: EndBug/add-and-commit@v9 
         with:
           add: 'LAST'
-          # Arguments for the git fetch command. If set to false, the action won't fetch the repo.
-          # For more info as to why fetching is usually recommended, please see the "Performance on large repos" FAQ. 
-          # Default: --tags --force
-          # fetch: false
           message: 'action: update last challenge'
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
