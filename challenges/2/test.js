@@ -1,5 +1,6 @@
 
 export const challenge = {
+    id: 2,
     title: "This is another challenge",
     description: "Ignore that",
     example: "Some example",

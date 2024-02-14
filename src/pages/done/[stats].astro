@@ -2,6 +2,7 @@
 ---
 import '@/styles/globals.css'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { challenge  } from "@/challenge"
 
 export function getStaticPaths() {
   return [
@@ -46,4 +47,24 @@ const {value: title, style} = getTitle()
                  </CardHeader>
             </Card>
         </div>
+        <script is:inline define:vars={{ challengeId: challenge.id, stats}}>
+            const hasDone = localStorage.getItem(`codle:${challengeId}`) 
+
+            if (!hasDone) {
+                removeAnyCodleStorage()
+                window.location.href = "/"
+            } else if(hasDone !== stats) {
+                 window.location.href = `/done/${hasDone}`
+            }
+
+            function removeAnyCodleStorage() {
+                const keys = [...Array(localStorage.length)]
+                keys.forEach((_, i) => {
+                    const key = localStorage.key(i)
+                    if(key.startsWith("codle:")) {
+                        localStorage.removeItem(key)
+                    }
+                })
+            }
+        </script>
 </div>

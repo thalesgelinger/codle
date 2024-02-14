@@ -32,18 +32,21 @@ import { challenge  } from "@/challenge"
                 <CardContent className="flex flex-col">
                     <CodeEditor
                         client:only
+                        challengeId={challenge.id}
                         testScript={challenge.tests}
                     />
                 </CardContent>
             </Card>
             <Toaster client:load/>
         </div>
-        <script is:inline>
+        <script is:inline define:vars={{ challengeId: challenge.id}}>
             function checkHasDone() {
 
                 console.log("checkHasDone")
 
-                const hasDone = localStorage.getItem("codle") 
+                const hasDone = localStorage.getItem(`codle:${challengeId}`) 
+
+                console.log("Has Done? ", hasDone)
 
                 switch (hasDone) {
                     case "win" :
@@ -54,10 +57,11 @@ import { challenge  } from "@/challenge"
                         break;
                 }
 
-                window.addEventListener("codle", checkHasDone)
             }
 
             checkHasDone()
+
+            window.addEventListener("codle", checkHasDone)
 
         </script>
     </body>

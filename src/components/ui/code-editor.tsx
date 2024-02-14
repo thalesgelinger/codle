@@ -10,11 +10,13 @@ import { attempsAtom } from "./attempts-indicator";
 
 type CodeEditorProps = {
     testScript: string;
+    challengeId: number;
     "client:only": boolean
 }
 
 const CodeEditor = ({
     testScript,
+    challengeId
 }: CodeEditorProps) => {
 
 
@@ -111,12 +113,7 @@ export function solve(param){
             setAttempts(prev => {
                 const attempts = prev + 1
                 if (attempts === 3) {
-                    setTimeout(() => {
-                        console.log("Setted")
-                        localStorage.setItem("codle", "lose")
-                        const evt = new CustomEvent("codle")
-                        window.dispatchEvent(evt)
-                    }, 1000)
+                    dispatchCodle("lose")
                 }
                 return attempts
             })
@@ -125,9 +122,20 @@ export function solve(param){
                 title: "Yayyy!!",
                 description: "You nailed it, good job!",
             })
+            dispatchCodle("win")
         }
 
         setIsRunning(false)
+    }
+
+    const dispatchCodle = (stats: "win" | "lose") => {
+        const timeout = setTimeout(() => {
+            console.log("Dispatch Event")
+            localStorage.setItem(`codle:${challengeId}`, stats)
+            const evt = new CustomEvent("codle")
+            window.dispatchEvent(evt)
+            clearTimeout(timeout)
+        }, 1000)
     }
 
 

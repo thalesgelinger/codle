@@ -1,5 +1,6 @@
 
 export const challenge = {
+    id: 1,
     title: "Spy number",
     description: "A Number is called SPY number if the sum and Product of its Digits are equal",
     example: " For Ex: 123 is a SPY Number, (1+2+3) = (1*2*3) ",
