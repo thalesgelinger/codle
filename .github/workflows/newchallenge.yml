@@ -27,8 +27,10 @@ jobs:
           echo "MAX_CHALLENGES = $MAX_CHALLENGES"
           echo "next=$NEXT" >> "$GITHUB_OUTPUT"
 
-  Setup-Dependencies:
+  Deploy-Production:
     runs-on: ubuntu-latest
+    environment: Vercel
+    needs: GetNextChallenge
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,14 +48,6 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-      
-  Deploy-Production:
-    runs-on: ubuntu-latest
-    environment: Vercel
-    needs: GetNextChallenge
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Copy New Challenge
         env:
           NEXT: ${{needs.GetNextChallenge.outputs.next}}
