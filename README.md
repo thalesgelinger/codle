@@ -1,47 +1,51 @@
-# Astro Starter Kit: Minimal
+# Codle: your daily code challenges
 
-```sh
-npm create astro@latest -- --template minimal
+The idea is like wordle, but for code (Very creative name, i know), but basically, everyday a new coding challenge is deployed, you have only 3 chances to make the right guess
+
+## Technologies
+
+This project works with very interesting technologies, 
+
+- Astro: for static pages
+- React: because i know i wanted to make it faster
+- Shadcn/ui: a tailwind component library very easy to use
+- Webcontainer: this was fun, it runs node on browser, but not just it, we can run also TS and python, next steps are about adding new language options, but today is just for JS
+
+## Want to add challenges to this repo, here's how you can do this
+
+There's a repo called `challenges` and it follows a very simples structure
+
+It's just a folder with a number for the challenge and then a test file
+
+challenges/
+├── 1
+│   └── test.js
+└── 2
+    └── test.js
+
+For creating new challenges, you just need to submit a PR with a new challenge in a folder with the next number, and a file following this format
+
+
+``` js 
+export const challenge = {
+    id: 1, // Should be same as challenge number
+    title: "", // Them title for the challenge
+    description: "", // A brifely description for this challenge
+    example: "", // Some example of what the code should do
+    requirement: "", // What is required that code to do
+    tests: runTests.toString() // JS allow as to convert functions as string to get declaration, so, it MUST have this name, runTests
+}
+
+
+function runTests() { // THis functino is what is executed for testing the challenge
+    // the error function is available by default in our project, 
+    // the solve is what runs, you must consider that your challenge need to accept a parameter and return something
+    // here you can right as many tests as possible using this if pattern 
+    // (is not the best, but it works, hehe, probably will update to jest in future)
+    if (solve(123) === false) error("Test failed") 
+}
+
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+#### Otherwise if you want just to play, please enjoy, codle.fun
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
