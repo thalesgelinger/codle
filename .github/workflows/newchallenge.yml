@@ -38,9 +38,9 @@ jobs:
           echo "NEXT = $NEXT"
           echo "MAX_CHALLENGES = $MAX_CHALLENGES"
       - name: Copy New Challenge
-        run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
+        run: cp ./challenges/"$(expr $(cat LAST) + 1)"/test.js ./src/challenge/index.js
       - name: Update Last Challenge deployed
-        run: echo "${NEXT}" > last_deployed.txt
+        run: echo "$(expr $(cat LAST) + 1)" > last_deployed.txt
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
