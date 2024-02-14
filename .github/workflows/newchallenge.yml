@@ -8,12 +8,29 @@ on:
     branches:
       - main
 jobs:
-  Deploy-Production:
+  Get-Next-Challenge:
     runs-on: ubuntu-latest
-    environment: Vercel
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Get last challenge deployed
+        outputs:
+          next: ${{ steps.next_challenge.outputs.next }}
+        steps:
+          - id: next_challenge
+            run: |
+              NEXT=$(expr $(cat LAST) + 1)
+              MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+              if [ "$NEXT" -gt "$MAX_CHALLENGES" ]; then
+                NEXT=$(expr $NEXT - $MAX_CHALLENGES)
+              fi
+              echo "NEXT = $NEXT"
+              echo "MAX_CHALLENGES = $MAX_CHALLENGES"
+              echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+
+  Setup-Dependencies:
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.4.0
         with:
@@ -28,19 +45,18 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-      - name: Get last challenge deployed
-        run: |
-          NEXT=$(expr $(cat LAST) + 1)
-          MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-          if [ "$NEXT" -gt "$MAX_CHALLENGES" ]; then
-            NEXT=$(expr $NEXT - $MAX_CHALLENGES)
-          fi
-          echo "NEXT = $NEXT"
-          echo "MAX_CHALLENGES = $MAX_CHALLENGES"
+      
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    environment: Vercel
+    needs: Get-Next-Challenge
+    steps:
+      - env:
+          NEXT: ${{needs.Get-Next-Challenge.outputs.next}}
       - name: Copy New Challenge
-        run: cp ./challenges/"$(expr $(cat LAST) + 1)"/test.js ./src/challenge/index.js
+        run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
       - name: Update Last Challenge deployed
-        run: echo "$(expr $(cat LAST) + 1)" > last_deployed.txt
+        run: echo "${NEXT}" > last_deployed.txt
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
