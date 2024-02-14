@@ -8,7 +8,7 @@ on:
     branches:
       - main
 jobs:
-  Get-Next-Challenge:
+  GetNextChallenge:
     runs-on: ubuntu-latest
     outputs:
       next: ${{ steps.next_challenge.outputs.next }}
@@ -16,6 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Get last challenge deployed
+        id: next_challenge
         run: |
           NEXT=$(expr $(cat LAST) + 1)
           MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
@@ -28,6 +29,7 @@ jobs:
 
   Setup-Dependencies:
     runs-on: ubuntu-latest
+    needs: GetNextChallenge
     steps:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.4.0
@@ -47,11 +49,11 @@ jobs:
   Deploy-Production:
     runs-on: ubuntu-latest
     environment: Vercel
-    needs: Get-Next-Challenge
+    needs: GetNextChallenge
     steps:
       - name: Copy New Challenge
         env:
-          NEXT: ${{needs.Get-Next-Challenge.outputs.next}}
+          NEXT: ${{needs.GetNextChallenge.outputs.next}}
         run: cp ./challenges/"${NEXT}"/test.js ./src/challenge/index.js
       - name: Update Last Challenge deployed
         run: echo "${NEXT}" > last_deployed.txt
