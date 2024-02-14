@@ -10,23 +10,21 @@ on:
 jobs:
   Get-Next-Challenge:
     runs-on: ubuntu-latest
+    outputs:
+      next: ${{ steps.next_challenge.outputs.next }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Get last challenge deployed
-        outputs:
-          next: ${{ steps.next_challenge.outputs.next }}
-        steps:
-          - id: next_challenge
-            run: |
-              NEXT=$(expr $(cat LAST) + 1)
-              MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-              if [ "$NEXT" -gt "$MAX_CHALLENGES" ]; then
-                NEXT=$(expr $NEXT - $MAX_CHALLENGES)
-              fi
-              echo "NEXT = $NEXT"
-              echo "MAX_CHALLENGES = $MAX_CHALLENGES"
-              echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+        run: |
+          NEXT=$(expr $(cat LAST) + 1)
+          MAX_CHALLENGES=$(find challenges -mindepth 1 -maxdepth 1 -type d | wc -l | tr -s " "| sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          if [ "$NEXT" -gt "$MAX_CHALLENGES" ]; then
+            NEXT=$(expr $NEXT - $MAX_CHALLENGES)
+          fi
+          echo "NEXT = $NEXT"
+          echo "MAX_CHALLENGES = $MAX_CHALLENGES"
+          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
 
   Setup-Dependencies:
     runs-on: ubuntu-latest
