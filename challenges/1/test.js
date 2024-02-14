@@ -10,5 +10,23 @@ export const challenge = {
 
 
 function runTests() {
-    if (solve(123) === false) error("Test failed")
+    if (solve(123) !== true) error("Test 1 failed");
+
+    if (solve(124) !== false) error("Test 2 failed");
+
+    if (solve(-132) !== true) error("Test 3 failed");
+
+    if (solve(-124) !== false) error("Test 4 failed");
+
+    if (solve(123456789) !== true) error("Test 5 failed");
+
+    if (solve(123456788) !== false) error("Test 6 failed");
+
+    if (solve(1) !== false) error("Test 7 failed");
+
+    if (solve(0) !== true) error("Test 8 failed");
+
+    if (solve(-12) !== true) error("Test 9 failed");
+
+    if (solve(-13) !== false) error("Test 10 failed");
 }
