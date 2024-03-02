@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState, type ElementRef, type LegacyRef, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Textarea } from "./textarea"
 import Prism from "prismjs"
 import { Button } from "./button";
 import { getWebContainerInstance } from "@/lib/web-container";
 import type { WebContainer } from "@webcontainer/api";
 import { useToast } from "./use-toast";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { attempsAtom } from "./attempts-indicator";
+import { challenge } from "../../challenge"
 
 type CodeEditorProps = {
     testScript: string;
@@ -25,7 +26,7 @@ const CodeEditor = ({
     const { toast } = useToast()
 
     const [code, setCode] = useState(`
-export function solve(param){
+export function solve(${challenge.inputParams.join(",")}){
     // PUT YOUR CODE HERE
 }
 `.trim()
@@ -60,7 +61,9 @@ export function solve(param){
                     contents: `
                     import { solve } from "./solve.js"
 
-                    const error = (msg) => { throw new Error(msg) }
+                    const assert = (test, description) => {
+                        if(test) throw new Error(description)
+                    }
                     
                     ${testScript}
 
